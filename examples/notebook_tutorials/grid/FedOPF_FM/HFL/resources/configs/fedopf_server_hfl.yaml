@@ -1,0 +1,99 @@
+client_configs:
+  train_configs:
+    # Local trainer
+    trainer: "ACOPFTrainer"
+    mode: "epoch" # "epoch", "step"
+    # num_local_steps: 10
+    num_local_epochs: 5
+    optim: "Adam"
+    optim_args:
+      lr: 1e-3
+      weight_decay: 0.0 # 1e-5
+    # LDF parameters
+    warmup_iter: 50
+    rho_init: 0.01 # 0.01
+    p_iter_max: 5 # 5
+    # Loss function
+    loss_fn_path: "./resources/loss/ldloss.py"
+    loss_fn_name: "LDLoss"
+    # Client validation
+    do_validation: False
+    do_pre_validation: False
+    metric_path: "./resources/metric/acopf.py"
+    metric_name: "acopf_feasibility"
+    # Differential privacy
+    use_dp: False
+    epsilon: 1
+    # Mini-batch gradient clipping
+    clip_grad: True
+    clip_value: 1.0 # 1
+    clip_norm: 2 # 1
+    # Data loader
+    train_batch_size: 50
+    val_batch_size: 1
+    train_data_shuffle: True
+    val_data_shuffle: False
+
+  model_configs:
+    model_path: "./resources/model/graphopf.py"
+    model_name: "EAGNN" # NOTE that sharing model is part of GraphOPF (i.e., EAGNN)!
+    model_kwargs:
+      n_gnn_layers: 3 # 3
+      hidden_dim: 40 # 40
+      K: 10 # 10
+      dropout: 0.1
+      concat: False
+      beta: True
+
+  comm_configs:
+    compressor_configs:
+      enable_compression: False
+      # Used if enable_compression is True
+      lossy_compressor: "SZ2Compressor"
+      lossless_compressor: "blosc"
+      error_bounding_mode: "REL"
+      error_bound: 1e-3
+      param_cutoff: 1024
+
+server_configs:
+  num_clients: 2
+  scheduler: "SyncScheduler" # "SyncScheduler", "AsyncScheduler"
+  optimize_memory: False # NOTE: kj
+  scheduler_kwargs:
+    same_init_model: True
+    optimize_memory: False # NOTE: kj
+  aggregator: "FedAvgAggregator" # FedAvgAggregator, FedAvgMAggregator, FedYogiAggregator, FedAdamAggregator, FedAdagradAggregator,  // ICEADMMAggregator, IIADMMAggregator
+  aggregator_kwargs:
+    # # FedAvgM params
+    # server_momentum_param_1: 0.9 # 0, 0.7, 0.9, 0.97, 0.99, 0.997
+
+    # # FedAdam params
+    # server_learning_rate: 1e-3 # 1e-3 ~ 1e0.5
+    # server_adapt_param: 1e-5 # 1e-5 ~ 1e-1
+    # server_momentum_param_1: 0.9
+    # server_momentum_param_2: 0.99
+
+    # # FedYogi params
+    # server_learning_rate: 1e-3 # 1e-3 ~ 1e0.5
+    # server_adapt_param: 1e-5 # 1e-5 ~ 1e-1
+    # server_momentum_param_1: 0.9
+    # server_momentum_param_2: 0.99
+
+    # # FedAdagrad params
+    # server_learning_rate: 1e-3
+    # server_adapt_param: 1e-5
+    # server_momentum_param_1: 0.9
+
+    client_weights_mode: "equal"
+    optimize_memory: False # NOTE: kj
+  device: "cuda:3" # "cuda:0"
+  num_global_epochs: 200 # i.e., Communication Round
+  logging_output_dirname: "./output"
+  logging_output_filename: "result"
+  comm_configs:
+    grpc_configs:
+      server_uri: localhost:50051
+      max_message_size: 1048576
+      use_ssl: False
+  checkpoint_dirname: "./saved_models"
+  checkpoint_filename: "checkpoint"

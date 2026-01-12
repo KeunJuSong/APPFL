@@ -1,0 +1,15 @@
+cu_configs:
+  ### HFL arguments
+  gg_correction_period: 1 # Period of group-global correction
+  ### CFL-GP arguments
+  n_models: 4 # 4
+  clustering_period: 2 # 2, 5
+  clustering_termination_threshold: 50 # 50
+  cu_compressor_configs:
+    use_reduced_G: False
+    gradient_compression_ratio: 100
+  num_comm_rounds: 200 # 200 # i.e., Communication Round
+  unknown_k: False
+  warmup_epoch: 0
+  checkpoints_interval: 100 #
+

@@ -1,0 +1,25 @@
+client_id: "Client1"
+
+train_configs:
+  # Device
+  device: "cuda:3" # "cuda:0"
+  # Logging and outputs
+  logging_output_dirname: "./output"
+  logging_output_filename: "result"
+  # Saving models
+  checkpoint_dirname: "./saved_models"
+  checkpoint_filename: "checkpoint"
+# optimize_memory: False # NOTE: kj
+
+# Local dataset
+data_configs:
+  dataset_path: "./resources/dataset/acopf_dataset.py"
+  dataset_name: "get_acopf_data"
+  dataset_kwargs:
+    client_id: 0
+
+comm_configs:
+  grpc_configs:
+    server_uri: localhost:50051
+    max_message_size: 1048576
+    use_ssl: False

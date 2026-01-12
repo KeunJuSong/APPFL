@@ -55,6 +55,15 @@ examples/gcloud/generated_pb2
 examples/gcloud/*.sh
 examples/gcloud/*.pb
 examples/gcloud/api_config.yaml
+
+examples/notebook_tutorials/grid/FedOPF_FM/FedAVG/saved_models*
+examples/notebook_tutorials/grid/FedOPF_FM/CFL-GP/saved_models*
+examples/notebook_tutorials/grid/FedOPF_FM/HFL/saved_models*
+
+examples/notebook_tutorials/grid/FedOPF_FM/fine-tuning-task/n-1/case*/data
+examples/notebook_tutorials/grid/FedOPF_FM/fine-tuning-task/unseen/Case*/data
+examples/notebook_tutorials/grid/FedOPF_FM/fine-tuning-task/unseen/Case4492
+
 note
 outputs/*
 _data
